@@ -1,5 +1,4 @@
-import { googleClientId } from "@/config";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { useEffect } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useTasksStore } from "../store/useTasksStore";
@@ -13,18 +12,18 @@ export const LoginPage = () => {
     setTasks([]);
   });
 
-  const handleSuccess = async (credentialResponse: any) => {
+  const handleSuccess = async (credentialResponse: CredentialResponse) => {
     const { credential } = credentialResponse;
 
     // Decodifica o JWT para obter as informações do usuário
-    const decodedToken = JSON.parse(atob(credential.split(".")[1]));
+    const decodedToken = JSON.parse(atob(credential!.split(".")[1]));
 
     setUser({
       name: decodedToken.name,
       email: decodedToken.email,
       picture: decodedToken.picture,
     });
-    setAccessToken(credential);
+    setAccessToken(credential!);
   };
 
   return (

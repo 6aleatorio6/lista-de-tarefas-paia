@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import { GoogleDriveService, Task } from "../services/googleDrive";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export function useTasks() {
-  const { accessToken } = useAuth();
+  const { accessToken } = useAuthStore();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
