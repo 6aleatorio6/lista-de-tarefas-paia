@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { LoginPage } from "./pages/LoginPage";
 import { TasksPage } from "./pages/TasksPage";
@@ -13,7 +13,7 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
 function App() {
   return (
     <GoogleOAuthProvider clientId={googleClientId}>
-      <BrowserRouter>
+      <BrowserRouter basename="/lista-de-tarefas-paia">
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route

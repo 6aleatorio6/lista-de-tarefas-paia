@@ -10,7 +10,7 @@ export const LoginPage = () => {
   // Limpa as tarefas ao fazer logout
   useEffect(() => {
     setTasks([]);
-  });
+  }, []);
 
   const handleSuccess = async (credentialResponse: CredentialResponse) => {
     const { credential } = credentialResponse;
