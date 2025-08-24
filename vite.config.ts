@@ -1,16 +1,11 @@
 import { defineConfig } from "vite";
 import path from "path";
 import react from "@vitejs/plugin-react-swc";
-
-// https://vite.dev/config/
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   base: "/lista-de-tarefas-paia/",
   build: { outDir: "build" },
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src/"),
-    },
-  },
+  resolve: { alias: { "@": path.resolve(__dirname, "./src/") } },
 });
