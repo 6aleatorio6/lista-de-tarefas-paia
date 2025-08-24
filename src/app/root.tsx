@@ -5,6 +5,7 @@ import { LoginPage } from "@/features/auth/pages/Login";
 import { AuthLayout } from "@/features/auth/_layout";
 import CreateTaskPage from "@/features/task/pages/Create";
 import TaskLayout from "@/features/task/_layout";
+import { HomePage } from "@/features/task/pages/Home";
 
 export function App() {
   return (
@@ -14,6 +15,7 @@ export function App() {
           <Route path="login" element={<LoginPage />} />
         </Route>
         <Route path="/tasks" element={<TaskLayout />}>
+          <Route index element={<HomePage />} />
           <Route index path="new" element={<CreateTaskPage />} />
         </Route>
 

@@ -10,6 +10,7 @@ export abstract class Auth {
   static async signInWithGoogle() {
     try {
       const result = await signInWithPopup(auth, googleProvider);
+
       return result.user;
     } catch (error) {
       console.error("Error signing in with Google:", error);

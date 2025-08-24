@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
-
+import { taskActions } from "@/shared/hooks/store/useTaskStore";
 import { Button } from "@/shadcn/ui/button";
 import {
   Form,
@@ -13,34 +13,38 @@ import {
   FormMessage,
 } from "@/shadcn/ui/form";
 import { Input } from "@/shadcn/ui/input";
-import { Textarea } from "@/shadcn/ui/textarea";
 
 const taskSchema = z.object({
   title: z.string().min(3, "O título deve ter pelo menos 3 caracteres"),
-  description: z.string().optional(),
-  dueDate: z.string().optional(),
 });
 
 type TaskFormValues = z.infer<typeof taskSchema>;
 
 export default function CreateTaskPage() {
   const navigate = useNavigate();
+
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      dueDate: "",
-    },
+    defaultValues: { title: "" },
   });
 
   const onSubmit = async (data: TaskFormValues) => {
     try {
-      // TODO: Implementar criação de tarefa
-      console.log("Criando tarefa:", data);
+      // Create a new task using the taskActions from useTask.ts
+      taskActions.addTask({
+        title: data.title,
+        completionLog: [],
+      });
+
       navigate("/tasks");
     } catch (error) {
       console.error("Erro ao criar tarefa:", error);
+      // You might want to display this error to the user
+      form.setError("title", {
+        type: "manual",
+        message:
+          error instanceof Error ? error.message : "Erro ao criar tarefa",
+      });
     }
   };
 
@@ -63,37 +67,6 @@ export default function CreateTaskPage() {
                 <FormLabel>Título</FormLabel>
                 <FormControl>
                   <Input placeholder="Digite o título da tarefa" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Descrição</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Digite uma descrição para a tarefa (opcional)"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="dueDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Data de conclusão</FormLabel>
-                <FormControl>
-                  <Input type="date" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
