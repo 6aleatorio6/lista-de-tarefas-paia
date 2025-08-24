@@ -1,12 +1,25 @@
-import { Routes, BrowserRouter } from "react-router-dom";
+import { Routes, Route, Navigate, HashRouter } from "react-router-dom";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { LoginPage } from "@/features/auth/pages/Login";
+import { AuthLayout } from "@/features/auth/_layout";
+import CreateTaskPage from "@/features/task/pages/Create";
+import TaskLayout from "@/features/task/_layout";
 
 export function App() {
   return (
-    <BrowserRouter basename="/lista-de-tarefas-paia">
-      <Routes></Routes>
-    </BrowserRouter>
+    <HashRouter>
+      <Routes>
+        <Route path="/auth" element={<AuthLayout />}>
+          <Route path="login" element={<LoginPage />} />
+        </Route>
+        <Route path="/tasks" element={<TaskLayout />}>
+          <Route index path="new" element={<CreateTaskPage />} />
+        </Route>
+
+        <Route path="*" element={<Navigate to="/tasks" replace />} />
+      </Routes>
+    </HashRouter>
   );
 }
 

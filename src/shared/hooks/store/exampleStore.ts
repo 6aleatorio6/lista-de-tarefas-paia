@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { FirebaseStorage } from "@/shared/utils/StorageZustand";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { createFirebaseStorage } from "../../services/firebase/storage";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface ExampleStore {
   counter: number;
@@ -17,7 +18,7 @@ export const useExampleStore = create<ExampleStore>()(
     }),
     {
       name: "example-store",
-      storage: createFirebaseStorage<ExampleStore>(),
+      storage: createJSONStorage(FirebaseStorage as any),
     }
   )
 );

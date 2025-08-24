@@ -1,7 +1,8 @@
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
+import { StateStorage } from "zustand/middleware";
 
-export abstract class FirebaseStorage {
+export class FirebaseStorage implements StateStorage<unknown> {
   getItem = async (name: string) => {
     try {
       const docRef = doc(db, "zustand", name);
@@ -9,8 +10,9 @@ export abstract class FirebaseStorage {
 
       if (docSnap.exists()) {
         const data = docSnap.data();
-        return { state: data.state };
+        return data.state;
       }
+
       return null;
     } catch (error) {
       console.error("Error getting item from Firestore:", error);
@@ -18,16 +20,16 @@ export abstract class FirebaseStorage {
     }
   };
 
-  static setItem = async (name: string, value: { state: unknown }) => {
+  setItem = async (name: string, value: string) => {
     try {
       const docRef = doc(db, "zustand", name);
-      await setDoc(docRef, value);
+      await setDoc(docRef, { state: value });
     } catch (error) {
       console.error("Error setting item in Firestore:", error);
     }
   };
 
-  static removeItem = async (name: string): Promise<void> => {
+  removeItem = async (name: string): Promise<void> => {
     try {
       const docRef = doc(db, "zustand", name);
       await setDoc(docRef, { state: null });
