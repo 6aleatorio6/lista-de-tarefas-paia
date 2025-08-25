@@ -6,42 +6,36 @@ import {
   TableHeader,
   TableRow,
 } from "@/shadcn/ui/table";
-import { Task } from "@/shared/hooks/store/useTaskStore";
-import { todayFormatted } from "@/shared/utils/todayFormatted";
-import { format, isBefore, subDays } from "date-fns";
+import { ITask, ICompletionLog } from "@/shared/hooks/store/useTaskStore";
+import { formatDate, IDateStringYMD } from "@/shared/utils/todayFormatted";
+import { format, subDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 interface TableSummaryProps {
-  tasks: Record<string, Task>;
+  tasks: ITask[];
+  completionLog: ICompletionLog;
   sizePage?: number;
 }
 
-export function TableSummary({ tasks, sizePage = 30 }: TableSummaryProps) {
-  const tasksArray = Object.entries(tasks).map(([title, task]) => ({
-    title,
-    completionLog: task.completionLog,
-  }));
+export function TableSummary({
+  tasks,
+  completionLog,
+  sizePage = 7,
+}: TableSummaryProps) {
+  const recentDates = Array.from({ length: sizePage }, (_, i) => {
+    const date = subDays(new Date(), sizePage - i - 1);
+    const formattedDate = formatDate(date);
+    const dayOfWeek = format(date, "EEEE", { locale: ptBR });
+    return { dateStr: formattedDate, dayOfWeek };
+  });
 
-  const allDates = [
-    ...new Set(
-      tasksArray.flatMap((task) => task.completionLog.map((log) => log.date))
-    ),
-  ].sort();
-
-  // Function to parse DD/MM/YYYY format
-  const parseDate = (dateStr: string) => {
-    const [day, month, year] = dateStr.split("/").map(Number);
-    return new Date(year, month - 1, day);
-  };
-
-  // Filter to show only the most recent days (default 30)
-  const recentDates = allDates
-    .filter((dateStr) => {
-      const date = parseDate(dateStr);
-      const cutoffDate = subDays(todayFormatted, sizePage);
-      return !isBefore(date, cutoffDate);
-    })
-    .sort((a, b) => parseDate(a).getTime() - parseDate(b).getTime());
+  if (!tasks.length) {
+    return (
+      <p className="text-sm text-muted-foreground py-5">
+        Nenhuma tarefa encontrada.
+      </p>
+    );
+  }
 
   return (
     <div className="rounded-md border">
@@ -49,28 +43,33 @@ export function TableSummary({ tasks, sizePage = 30 }: TableSummaryProps) {
         <TableHeader>
           <TableRow>
             <TableHead>Data</TableHead>
-            {tasksArray.map((task) => (
-              <TableHead key={task.title}>{task.title}</TableHead>
+            {tasks.map((task) => (
+              <TableHead key={task.title} className="text-center">
+                {task.title}
+              </TableHead>
             ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {recentDates.map((dateStr) => {
-            const date = parseDate(dateStr);
+          {recentDates.map(({ dateStr, dayOfWeek }) => {
+            const completedTasksForDay =
+              completionLog[dateStr as IDateStringYMD] || [];
 
             return (
               <TableRow key={dateStr}>
                 <TableCell className="font-medium">
-                  {format(date, "EEEE, dd 'de' MMMM", {
-                    locale: ptBR,
-                  })}
+                  <span className="hidden sm:inline">{dateStr} </span>
+                  <span>
+                    {dayOfWeek} {formatDate() === dateStr ? "(hoje)" : ""}
+                  </span>
                 </TableCell>
-                {tasksArray.map((task) => {
-                  const completed = task.completionLog.some(
-                    (log) => log.date === dateStr && log.isCompleted
-                  );
+                {tasks.map((task) => {
+                  const completed = completedTasksForDay.includes(task.title);
                   return (
-                    <TableCell key={`${dateStr}-${task.title}`}>
+                    <TableCell
+                      key={`${dateStr}-${task.title}`}
+                      className="text-center"
+                    >
                       {completed ? "✅" : "❌"}
                     </TableCell>
                   );

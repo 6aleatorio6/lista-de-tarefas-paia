@@ -13,9 +13,11 @@ import {
   FormMessage,
 } from "@/shadcn/ui/form";
 import { Input } from "@/shadcn/ui/input";
+import { Textarea } from "@/shadcn/ui/textarea";
 
 const taskSchema = z.object({
   title: z.string().min(3, "O título deve ter pelo menos 3 caracteres"),
+  description: z.string().optional(),
 });
 
 type TaskFormValues = z.infer<typeof taskSchema>;
@@ -25,7 +27,7 @@ export default function CreateTaskPage() {
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
-    defaultValues: { title: "" },
+    defaultValues: { title: "", description: "" },
   });
 
   const onSubmit = async (data: TaskFormValues) => {
@@ -33,7 +35,7 @@ export default function CreateTaskPage() {
       // Create a new task using the taskActions from useTask.ts
       taskActions.addTask({
         title: data.title,
-        completionLog: [],
+        description: data.description,
       });
 
       navigate("/tasks");
@@ -67,6 +69,24 @@ export default function CreateTaskPage() {
                 <FormLabel>Título</FormLabel>
                 <FormControl>
                   <Input placeholder="Digite o título da tarefa" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Descrição</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Digite a descrição da tarefa"
+                    className="resize-none"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

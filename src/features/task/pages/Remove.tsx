@@ -1,18 +1,32 @@
 import { useTaskStore, taskActions } from "@/shared/hooks/store/useTaskStore";
 import { Button } from "@/shadcn/ui/button";
-import { Trash2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { TaskTable } from "../components/TaskTable";
+import { TaskListTable } from "../components/TaskListTable";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/shadcn/ui/alert-dialog";
+import { useState } from "react";
 
 export default function RemoveTaskPage() {
   const navigate = useNavigate();
   const tasks = useTaskStore((state) => state.tasks);
+  const [taskToRemove, setTaskToRemove] = useState<string | null>(null);
 
-  const handleRemoveTask = (taskTitle: string) => {
-    try {
-      taskActions.removeTask(taskTitle);
-    } catch (error) {
-      console.error("Erro ao remover tarefa:", error);
+  const handleConfirmRemove = () => {
+    if (taskToRemove) {
+      try {
+        taskActions.removeTask(taskToRemove);
+      } catch (error) {
+        console.error("Erro ao remover tarefa:", error);
+      }
+      setTaskToRemove(null);
     }
   };
 
@@ -27,15 +41,9 @@ export default function RemoveTaskPage() {
         </p>
       </div>
 
-      <TaskTable
+      <TaskListTable
         tasks={tasks}
-        actions={[
-          {
-            title: "Remover tarefa",
-            callback: handleRemoveTask,
-            icon: <Trash2Icon className="h-4 w-4" />,
-          },
-        ]}
+        onRemove={(taskTitle) => setTaskToRemove(taskTitle)}
       />
 
       <div className="flex gap-4 pt-4">
@@ -43,6 +51,30 @@ export default function RemoveTaskPage() {
           Voltar
         </Button>
       </div>
+
+      <AlertDialog
+        open={taskToRemove !== null}
+        onOpenChange={() => setTaskToRemove(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remover tarefa</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja remover a tarefa "{taskToRemove}"? Esta
+              ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 hover:bg-red-700"
+              onClick={handleConfirmRemove}
+            >
+              Remover
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
