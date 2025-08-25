@@ -27,7 +27,9 @@ export function AuthLayout() {
             strokeLinejoin="round"
             className="mb-6 h-12 w-12"
           >
-            <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2z" />
+            <path d="m9 11 3 3L22 4" />
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
           </svg>
 
           <div className="space-y-8 max-w-[400px]">
@@ -120,8 +122,8 @@ export function AuthLayout() {
           </div>
         </div>
       </div>
-      <div className="h-full lg:p-8">
-        <div className="mx-auto flex w-full h-full flex-col justify-center space-y-6 sm:w-[350px]">
+      <div className="h-full lg:p-8 ">
+        <div className="mx-auto flex w-full h-full flex-col justify-center space-y-6 sm:w-[350px] ">
           <Outlet />
         </div>
       </div>

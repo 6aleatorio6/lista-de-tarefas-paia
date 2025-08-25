@@ -1,5 +1,3 @@
-import { Card } from "@/shadcn/ui/card";
-
 export function AboutPage() {
   return (
     <div className="p-6">
