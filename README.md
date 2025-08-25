@@ -1,69 +1,60 @@
-# React + TypeScript + Vite
+# Lista de Tarefas Diária
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação web focada em ajudar você a manter uma rotina consistente. Diferente de outras soluções, me concentrei em atividades recorrentes que precisam ser realizadas diariamente.
 
-Currently, two official plugins are available:
+Cada tarefa se torna parte da sua rotina, precisando ser marcada como concluída todos os dias. Tarefas não confirmadas são registradas como não realizadas, permitindo acompanhamento preciso do seu histórico.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Características Principais
 
-## Expanding the ESLint configuration
+- **Foco em Rotinas**: Ideal para hábitos diários e tarefas recorrentes
+- **Histórico Permanente**: Registro de tarefas realizadas e não realizadas
+- **Acompanhamento Visual**: Visualize seu progresso ao longo do tempo
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tecnologias Utilizadas
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **React + TypeScript**: Interface e tipagem segura
+- **Vite**: Bundler e ambiente de desenvolvimento
+- **Firebase**: Autenticação e armazenamento
+- **Tailwind CSS**: Estilização responsiva
+- **Shadcn/UI**: Componentes acessíveis
+- **Zustand**: Gerenciamento de estado
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## Funcionalidades
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **📝 Gerenciamento**: Adicione, edite e remova tarefas
+- **✓ Controle Diário**: Organize tarefas por dia
+- **📊 Histórico**: Acompanhe seu progresso
+- **🔄 Sincronização**: Acesso em qualquer dispositivo
+- **🔒 Segurança**: Login via Google
+- **📱 Responsividade**: Adaptável para desktop e mobile
+
+## Como Usar
+
+1. Acesse a aplicação
+2. Faça login com sua conta Google
+3. Comece a adicionar suas tarefas
+4. Organize e gerencie suas atividades diárias
+5. Acompanhe seu progresso
+
+## Desenvolvimento
+
+Para rodar o projeto localmente:
+
+```bash
+# Clone o repositório
+git clone [url-do-repositório]
+
+# Instale as dependências
+npm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env
+# Adicione suas credenciais do Firebase
+
+# Inicie o servidor de desenvolvimento
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Licença
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Este projeto está licenciado sob a MIT License - veja o arquivo [LICENSE](LICENSE) para detalhes.

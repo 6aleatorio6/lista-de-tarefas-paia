@@ -7,6 +7,7 @@ import CreateTaskPage from "@/features/task/pages/Create";
 import TaskLayout from "@/features/task/_layout";
 import { HomePage } from "@/features/task/pages/Home";
 import RemoveTaskPage from "@/features/task/pages/Remove";
+import { AboutPage } from "@/features/task/pages/About";
 
 export function App() {
   return (
@@ -19,6 +20,7 @@ export function App() {
           <Route index element={<HomePage />} />
           <Route path="new" element={<CreateTaskPage />} />
           <Route path="remove" element={<RemoveTaskPage />} />
+          <Route path="about" element={<AboutPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/tasks" replace />} />
