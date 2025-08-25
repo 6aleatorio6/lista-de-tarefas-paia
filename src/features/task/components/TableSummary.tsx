@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/shadcn/ui/table";
 import { Task } from "@/shared/hooks/store/useTaskStore";
+import { todayFormatted } from "@/shared/utils/todayFormatted";
 import { format, isBefore, subDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -33,17 +34,14 @@ export function TableSummary({ tasks, sizePage = 30 }: TableSummaryProps) {
     return new Date(year, month - 1, day);
   };
 
-  // Get today's date
-  const today = new Date();
-
   // Filter to show only the most recent days (default 30)
   const recentDates = allDates
     .filter((dateStr) => {
       const date = parseDate(dateStr);
-      const cutoffDate = subDays(today, sizePage);
+      const cutoffDate = subDays(todayFormatted, sizePage);
       return !isBefore(date, cutoffDate);
     })
-    .sort((a, b) => parseDate(b).getTime() - parseDate(a).getTime());
+    .sort((a, b) => parseDate(a).getTime() - parseDate(b).getTime());
 
   return (
     <div className="rounded-md border">

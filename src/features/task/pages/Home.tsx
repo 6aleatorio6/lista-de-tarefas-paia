@@ -1,6 +1,8 @@
-import { useTaskStore } from "@/shared/hooks/store/useTaskStore";
+import { taskActions, useTaskStore } from "@/shared/hooks/store/useTaskStore";
 import { TableSummary } from "../components/TableSummary";
 import { TaskTable } from "../components/TaskTable";
+import { CheckIcon } from "lucide-react";
+import { todayFormatted } from "@/shared/utils/todayFormatted";
 
 export function HomePage() {
   const tasks = useTaskStore((state) => state.tasks);
@@ -16,7 +18,18 @@ export function HomePage() {
       {/* Tarefas atuais */}
       <div className="space-y-4">
         <h2 className="text-xl font-semibold tracking-tight">Tarefas Atuais</h2>
-        <TaskTable tasks={tasks} />
+        <TaskTable
+          tasks={tasks}
+          actions={[
+            {
+              title: "Marcar como concluída",
+              icon: <CheckIcon className="h-4 w-4" />,
+              callback: (taskTitle) => {
+                taskActions.markTaskCompletedForDay(taskTitle, todayFormatted);
+              },
+            },
+          ]}
+        />
       </div>
     </div>
   );

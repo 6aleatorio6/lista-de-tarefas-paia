@@ -6,23 +6,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/shadcn/ui/table";
-import { Task, taskActions } from "@/shared/hooks/store/useTaskStore";
+import { Task } from "@/shared/hooks/store/useTaskStore";
 import { Button } from "@/shadcn/ui/button";
-import { CheckIcon } from "lucide-react";
 import { useMemo } from "react";
+import { todayFormatted } from "@/shared/utils/todayFormatted";
 
 interface TaskTableProps {
   tasks: Record<string, Task>;
+  actions: {
+    title: string;
+    callback: (taskTitle: string) => void;
+    icon: React.ReactNode;
+  }[];
 }
 
-export function TaskTable({ tasks }: TaskTableProps) {
-  const todayFormatted = useMemo(() => {
-    const today = new Date();
-    return `${today.getDate()}/${
-      today.getMonth() + 1
-    }/${today.getFullYear()}` as const;
-  }, []);
-
+export function TaskTable({ tasks, actions }: TaskTableProps) {
   // Convert tasks object to array and filter out tasks completed today
   const tasksForToday = useMemo(
     () =>
@@ -36,10 +34,6 @@ export function TaskTable({ tasks }: TaskTableProps) {
         .filter((task) => !task.completedToday),
     [tasks, todayFormatted]
   );
-
-  const handleCompleteTask = (taskTitle: string) => {
-    taskActions.markTaskCompletedForDay(taskTitle, todayFormatted);
-  };
 
   if (tasksForToday.length === 0) {
     return (
@@ -76,17 +70,17 @@ export function TaskTable({ tasks }: TaskTableProps) {
                 </span>
               </TableCell>
               <TableCell>
-                {!task.completedToday && (
+                {actions.map((action, index) => (
                   <Button
+                    key={index}
+                    title={action.title}
                     variant="outline"
                     size="sm"
-                    onClick={() => handleCompleteTask(task.title)}
-                    className="h-8 w-8 p-0"
-                    title="Marcar como concluída"
+                    onClick={() => action.callback?.(task.title)}
                   >
-                    <CheckIcon className="h-4 w-4" />
+                    {action.icon}
                   </Button>
-                )}
+                ))}
               </TableCell>
             </TableRow>
           ))}

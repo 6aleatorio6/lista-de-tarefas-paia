@@ -6,6 +6,7 @@ import { AuthLayout } from "@/features/auth/_layout";
 import CreateTaskPage from "@/features/task/pages/Create";
 import TaskLayout from "@/features/task/_layout";
 import { HomePage } from "@/features/task/pages/Home";
+import RemoveTaskPage from "@/features/task/pages/Remove";
 
 export function App() {
   return (
@@ -16,7 +17,8 @@ export function App() {
         </Route>
         <Route path="/tasks" element={<TaskLayout />}>
           <Route index element={<HomePage />} />
-          <Route index path="new" element={<CreateTaskPage />} />
+          <Route path="new" element={<CreateTaskPage />} />
+          <Route path="remove" element={<RemoveTaskPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/tasks" replace />} />

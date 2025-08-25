@@ -55,7 +55,9 @@ export const taskActions = {
         throw new Error(`Task with title "${taskTitle}" does not exist.`);
       }
 
-      return { ...state.tasks, [taskTitle]: undefined };
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [taskTitle]: _, ...remainingTasks } = state.tasks;
+      return { ...remainingTasks };
     });
   },
 
