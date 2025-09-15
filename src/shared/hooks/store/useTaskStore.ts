@@ -83,7 +83,7 @@ export const taskActions = {
     });
   },
 
-  updateTask: (taskTitle: string, updates: Partial<Omit<ITask, "title">>) => {
+  updateTask: (taskTitle: string, updates: Partial<ITask>) => {
     useTaskStore.setState((state) => {
       const taskIndex = state.tasks.findIndex(
         (task) => task.title === taskTitle
@@ -93,14 +93,37 @@ export const taskActions = {
         throw new Error(`Task with title "${taskTitle}" does not exist.`);
       }
 
+      // Check if new title already exists (only if title is being updated)
+      if (updates.title && updates.title !== taskTitle) {
+        if (state.tasks.find((task) => task.title === updates.title)) {
+          throw new Error(`Task with title "${updates.title}" already exists.`);
+        }
+      }
+
       const updatedTasks = [...state.tasks];
       updatedTasks[taskIndex] = {
         ...updatedTasks[taskIndex],
         ...updates,
       };
 
+      // Update completion log if title changed
+      let updatedCompletionLog = state.completionLog;
+      if (updates.title && updates.title !== taskTitle) {
+        updatedCompletionLog = { ...state.completionLog };
+
+        for (const [date, titles] of Object.entries(updatedCompletionLog)) {
+          const titleIndex = titles.indexOf(taskTitle);
+          if (titleIndex !== -1) {
+            const newTitles = [...titles];
+            newTitles[titleIndex] = updates.title;
+            updatedCompletionLog[date as IDateStringYMD] = newTitles;
+          }
+        }
+      }
+
       return {
         tasks: updatedTasks,
+        completionLog: updatedCompletionLog,
       };
     });
   },
