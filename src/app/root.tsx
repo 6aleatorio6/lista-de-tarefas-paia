@@ -6,7 +6,7 @@ import { AuthLayout } from "@/features/auth/_layout";
 import CreateTaskPage from "@/features/task/pages/Create";
 import TaskLayout from "@/features/task/_layout";
 import { HomePage } from "@/features/task/pages/Home";
-import RemoveTaskPage from "@/features/task/pages/Remove";
+import ManageTaskPage from "@/features/task/pages/Manage";
 import { AboutPage } from "@/features/task/pages/About";
 
 export function App() {
@@ -19,7 +19,7 @@ export function App() {
         <Route path="/tasks" element={<TaskLayout />}>
           <Route index element={<HomePage />} />
           <Route path="new" element={<CreateTaskPage />} />
-          <Route path="remove" element={<RemoveTaskPage />} />
+          <Route path="manage" element={<ManageTaskPage />} />
           <Route path="about" element={<AboutPage />} />
         </Route>
 

@@ -13,11 +13,11 @@ import { Auth } from "@/shared/utils/Auth";
 import { useGetUser } from "@/shared/hooks/useGetUser";
 import {
   Plus,
-  Trash2,
   LogOut,
   ChevronDown,
   RefreshCw,
   Info,
+  Settings,
 } from "lucide-react";
 import { taskActions } from "@/shared/hooks/store/useTaskStore";
 
@@ -75,11 +75,11 @@ export default function TaskLayout() {
               </Button>
               <Button
                 variant="ghost"
-                onClick={() => navigate("/tasks/remove")}
+                onClick={() => navigate("/tasks/manage")}
                 className="flex items-center gap-2"
               >
-                <Trash2 className="h-4 w-4" />
-                Remover Tarefas
+                <Settings className="h-4 w-4" />
+                Gerenciar Tarefas
               </Button>
               <Button
                 variant="ghost"
@@ -157,11 +157,11 @@ export default function TaskLayout() {
                     Nova Tarefa
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => navigate("/tasks/remove")}
+                    onClick={() => navigate("/tasks/manage")}
                     className="cursor-pointer"
                   >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Remover Tarefas
+                    <Settings className="mr-2 h-4 w-4" />
+                    Gerenciar Tarefas
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={handleRefresh}
