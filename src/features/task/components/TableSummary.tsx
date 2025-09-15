@@ -8,8 +8,19 @@ import {
 } from "@/shadcn/ui/table";
 import { ITask, ICompletionLog } from "@/shared/hooks/store/useTaskStore";
 import { formatDate, IDateStringYMD } from "@/shared/utils/todayFormatted";
+
 import { format, subDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/shadcn/ui/alert-dialog";
 
 interface TableSummaryProps {
   tasks: ITask[];
@@ -22,6 +33,8 @@ export function TableSummary({
   completionLog,
   sizePage = 7,
 }: TableSummaryProps) {
+  const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
+
   const recentDates = Array.from({ length: sizePage }, (_, i) => {
     const date = subDays(new Date(), sizePage - i - 1);
     const formattedDate = formatDate(date);
@@ -45,7 +58,12 @@ export function TableSummary({
             <TableHead>Data</TableHead>
             {tasks.map((task) => (
               <TableHead key={task.title} className="text-center">
-                {task.title}
+                <button
+                  className="underline hover:no-underline"
+                  onClick={() => setSelectedTask(task)}
+                >
+                  {task.title}
+                </button>
               </TableHead>
             ))}
           </TableRow>
@@ -79,6 +97,33 @@ export function TableSummary({
           })}
         </TableBody>
       </Table>
+
+      {/* Modal com informações da task */}
+
+      <AlertDialog
+        open={!!selectedTask}
+        onOpenChange={() => setSelectedTask(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Informações da Tarefa</AlertDialogTitle>
+            <AlertDialogDescription>
+              <div className="space-y-2">
+                <p>
+                  <strong>Título:</strong> {selectedTask?.title}
+                </p>
+                <p>
+                  <strong>Descrição:</strong>{" "}
+                  {selectedTask?.description || "Sem descrição"}
+                </p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Fechar</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
