@@ -12,18 +12,20 @@ import { useMemo } from "react";
 
 interface PendingTaskTableProps {
   tasks: ITask[];
-  completedTasks: string[];
-  onComplete: (taskTitle: string) => void;
+  completedTaskIndices: number[];
+  onComplete: (taskIndex: number) => void;
 }
 
 export function PendingTaskTable({
   tasks,
-  completedTasks,
+  completedTaskIndices,
   onComplete,
 }: PendingTaskTableProps) {
   const pendingTasks = useMemo(() => {
-    return tasks.filter((task) => !completedTasks.includes(task.title));
-  }, [tasks, completedTasks]);
+    return tasks
+      .map((task, index) => ({ task, index }))
+      .filter(({ index }) => !completedTaskIndices.includes(index));
+  }, [tasks, completedTaskIndices]);
 
   if (pendingTasks.length === 0) {
     return (
@@ -44,8 +46,8 @@ export function PendingTaskTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {pendingTasks.map((task) => (
-            <TableRow key={task.title}>
+          {pendingTasks.map(({ task, index }) => (
+            <TableRow key={`${task.title}-${index}`}>
               <TableCell>{task.title}</TableCell>
               <TableCell>
                 <span className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium bg-yellow-50 text-yellow-700">
@@ -57,7 +59,7 @@ export function PendingTaskTable({
                   title="Marcar como concluída"
                   variant="outline"
                   size="sm"
-                  onClick={() => onComplete(task.title)}
+                  onClick={() => onComplete(index)}
                 >
                   ✓
                 </Button>

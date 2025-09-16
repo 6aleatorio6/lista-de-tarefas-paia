@@ -1,15 +1,20 @@
 import { Card } from "@/shadcn/ui/card";
-import { taskActions, useTaskStore } from "@/shared/hooks/store/useTaskStore";
-
+import { useTaskStore } from "@/shared/hooks/store/useTaskStore";
+import {
+  completedTaskLogActions,
+  useCompletedTaskLogStore,
+} from "@/shared/hooks/store/useCompletedTaskLogStore";
 import { formatDate } from "@/shared/utils/todayFormatted";
 import { TableSummary } from "./components/TableSummary";
 import { PendingTaskTable } from "./components/PendingTaskTable";
 
 export function HomePage() {
   const today = formatDate();
-  const tasks = useTaskStore((state) => state.tasks);
-  const completionLog = useTaskStore((state) => state.completionLog);
-  const completedTasks = completionLog[today] || [];
+
+  const tasks = useTaskStore();
+  const completionLog = useCompletedTaskLogStore() || {};
+
+  const completedTaskIndices = completionLog[today] || [];
 
   return (
     <div className="p-6 space-y-8">
@@ -44,13 +49,13 @@ export function HomePage() {
               <div className="flex items-center gap-1">
                 <div className="w-3 h-3 bg-yellow-400 rounded-full" />
                 <span className="text-sm text-muted-foreground">
-                  Pendentes hoje: {tasks.length - completedTasks.length}
+                  Pendentes hoje: {tasks.length - completedTaskIndices.length}
                 </span>
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-3 h-3 bg-green-400 rounded-full" />
                 <span className="text-sm text-muted-foreground">
-                  Concluídas hoje: {completedTasks.length}
+                  Concluídas hoje: {completedTaskIndices.length}
                 </span>
               </div>
             </div>
@@ -58,9 +63,9 @@ export function HomePage() {
 
           <PendingTaskTable
             tasks={tasks}
-            completedTasks={completedTasks}
-            onComplete={(taskTitle) => {
-              taskActions.markTaskCompleted(taskTitle, today);
+            completedTaskIndices={completedTaskIndices}
+            onComplete={(taskIndex) => {
+              completedTaskLogActions.markTaskCompleted(taskIndex, today);
             }}
           />
         </div>

@@ -1,26 +1,17 @@
 import { Auth } from "@/shared/utils/Auth";
 import { asyncStorageZustand } from "@/shared/utils/storageZustand";
-import { IDateStringYMD } from "@/shared/utils/todayFormatted";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export type ITask = {
   title: string;
   description?: string;
+  isRemoved?: boolean;
 };
 
-export type ICompletionLog = Record<IDateStringYMD, string[]>;
-
-// -------
-
-interface TaskStore {
-  tasks: ITask[];
-  completionLog: ICompletionLog;
-}
-
-export const useTaskStore = create<TaskStore>()(
-  persist<TaskStore>(() => ({ tasks: [], completionLog: {} }), {
-    name: "task-store",
+export const useTaskStore = create<ITask[]>()(
+  persist<ITask[]>(() => [], {
+    name: "task-store-2",
     storage: asyncStorageZustand(),
     skipHydration: true,
   })
@@ -42,107 +33,51 @@ export const taskActions = {
   },
 
   addTask: (newTask: ITask) => {
-    useTaskStore.setState((state) => {
-      if (state.tasks.find((task) => task.title === newTask.title)) {
+    useTaskStore.setState((taskState) => {
+      if (taskState.find((task) => task.title === newTask.title)) {
         throw new Error(`Task with title "${newTask.title}" already exists.`);
       }
 
-      return {
-        tasks: [...state.tasks, newTask],
-      };
+      return [...taskState, newTask];
     });
   },
 
   removeTask: (taskTitle: string) => {
-    useTaskStore.setState((state) => {
-      const taskIndex = state.tasks.findIndex(
-        (task) => task.title === taskTitle
-      );
+    useTaskStore.setState((taskState) => {
+      const taskIndex = taskState.findIndex((task) => task.title === taskTitle);
 
       if (taskIndex === -1) {
         throw new Error(`Task with title "${taskTitle}" does not exist.`);
       }
 
-      const updatedTasks = [...state.tasks];
-      updatedTasks.splice(taskIndex, 1);
+      const updatedTasks = [...taskState];
 
-      // Remove também todas as referências nos logs de conclusão
-      const updatedCompletionLog: ICompletionLog = {};
-
-      for (const [date, titles] of Object.entries(state.completionLog)) {
-        const filteredTitles = titles.filter((title) => title !== taskTitle);
-        if (filteredTitles.length > 0) {
-          updatedCompletionLog[date as IDateStringYMD] = filteredTitles;
-        }
-      }
-
-      return {
-        tasks: updatedTasks,
-        completionLog: updatedCompletionLog,
+      updatedTasks[taskIndex] = {
+        ...updatedTasks[taskIndex],
+        isRemoved: true,
       };
+
+      return updatedTasks;
     });
   },
 
   updateTask: (taskTitle: string, updates: Partial<ITask>) => {
-    useTaskStore.setState((state) => {
-      const taskIndex = state.tasks.findIndex(
-        (task) => task.title === taskTitle
-      );
+    useTaskStore.setState((taskState) => {
+      const taskIndex = taskState.findIndex((task) => task.title === taskTitle);
 
       if (taskIndex === -1) {
         throw new Error(`Task with title "${taskTitle}" does not exist.`);
       }
 
-      // Check if new title already exists (only if title is being updated)
-      if (updates.title && updates.title !== taskTitle) {
-        if (state.tasks.find((task) => task.title === updates.title)) {
-          throw new Error(`Task with title "${updates.title}" already exists.`);
-        }
-      }
+      const updatedTasks = [...taskState];
 
-      const updatedTasks = [...state.tasks];
       updatedTasks[taskIndex] = {
         ...updatedTasks[taskIndex],
         ...updates,
+        title: updates.title || updatedTasks[taskIndex]!.title,
       };
 
-      // Update completion log if title changed
-      let updatedCompletionLog = state.completionLog;
-      if (updates.title && updates.title !== taskTitle) {
-        updatedCompletionLog = { ...state.completionLog };
-
-        for (const [date, titles] of Object.entries(updatedCompletionLog)) {
-          const titleIndex = titles.indexOf(taskTitle);
-          if (titleIndex !== -1) {
-            const newTitles = [...titles];
-            newTitles[titleIndex] = updates.title;
-            updatedCompletionLog[date as IDateStringYMD] = newTitles;
-          }
-        }
-      }
-
-      return {
-        tasks: updatedTasks,
-        completionLog: updatedCompletionLog,
-      };
-    });
-  },
-
-  markTaskCompleted: (taskTitle: string, date: IDateStringYMD) => {
-    useTaskStore.setState((state) => {
-      const task = state.tasks.find((t) => t.title === taskTitle);
-      if (!task) {
-        throw new Error(`Task with title "${taskTitle}" does not exist.`);
-      }
-
-      const dayLogs = state.completionLog[date] || [];
-
-      return {
-        completionLog: {
-          ...state.completionLog,
-          [date]: [...dayLogs, taskTitle],
-        },
-      };
+      return updatedTasks;
     });
   },
 };
