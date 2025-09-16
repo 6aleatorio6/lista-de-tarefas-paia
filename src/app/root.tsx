@@ -1,30 +1,41 @@
 import { Routes, Route, Navigate, HashRouter } from "react-router-dom";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { LoginPage } from "@/features/auth/pages/Login";
-import { AuthLayout } from "@/features/auth/_layout";
-import CreateTaskPage from "@/features/task/pages/Create";
-import TaskLayout from "@/features/task/_layout";
-import { HomePage } from "@/features/task/pages/Home";
-import ManageTaskPage from "@/features/task/pages/Manage";
-import { AboutPage } from "@/features/task/pages/About";
+import { lazy, Suspense } from "react";
+
+const LoginPage = lazy(() =>
+  import("@/features/auth/pages/Login").then((m) => ({ default: m.LoginPage }))
+);
+const AuthLayout = lazy(() =>
+  import("@/features/auth/_layout").then((m) => ({ default: m.AuthLayout }))
+);
+const TaskLayout = lazy(() => import("@/features/task/_layout"));
+const HomePage = lazy(() =>
+  import("@/features/task/pages/Home").then((m) => ({ default: m.HomePage }))
+);
+const ManageTaskPage = lazy(() => import("@/features/task/pages/Manage"));
+
+const AboutPage = lazy(() =>
+  import("@/features/task/pages/About").then((m) => ({ default: m.AboutPage }))
+);
 
 export function App() {
   return (
     <HashRouter>
-      <Routes>
-        <Route path="/auth" element={<AuthLayout />}>
-          <Route path="login" element={<LoginPage />} />
-        </Route>
-        <Route path="/tasks" element={<TaskLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="new" element={<CreateTaskPage />} />
-          <Route path="manage" element={<ManageTaskPage />} />
-          <Route path="about" element={<AboutPage />} />
-        </Route>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/auth" element={<AuthLayout />}>
+            <Route path="login" element={<LoginPage />} />
+          </Route>
+          <Route path="/tasks" element={<TaskLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="manage" element={<ManageTaskPage />} />
+            <Route path="about" element={<AboutPage />} />
+          </Route>
 
-        <Route path="*" element={<Navigate to="/tasks" replace />} />
-      </Routes>
+          <Route path="*" element={<Navigate to="/tasks" replace />} />
+        </Routes>
+      </Suspense>
     </HashRouter>
   );
 }
