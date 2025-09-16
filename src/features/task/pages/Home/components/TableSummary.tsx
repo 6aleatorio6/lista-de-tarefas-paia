@@ -13,15 +13,8 @@ import { formatDate, IDateStringYMD } from "@/shared/utils/todayFormatted";
 import { format, subDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/shadcn/ui/alert-dialog";
+import { TaskInfoDialog } from "./TaskInfoDialog";
+import { Button } from "@/shadcn/ui/button";
 
 interface TableSummaryProps {
   tasks: ITask[];
@@ -34,10 +27,20 @@ export function TableSummary({
   completionLog,
   sizePage = 7,
 }: TableSummaryProps) {
-  const [selectedTask, setSelectedTask] = useState<{
-    task: ITask;
-    index: number;
-  } | null>(null);
+  const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
+  const [selectedTaskIndex, setSelectedTaskIndex] = useState<number | null>(
+    null
+  );
+
+  const handleTaskClick = (task: ITask, index: number) => {
+    setSelectedTask(task);
+    setSelectedTaskIndex(index);
+  };
+
+  const handleCloseDialog = () => {
+    setSelectedTask(null);
+    setSelectedTaskIndex(null);
+  };
 
   const recentDates = Array.from({ length: sizePage }, (_, i) => {
     const date = subDays(new Date(), sizePage - i - 1);
@@ -62,12 +65,13 @@ export function TableSummary({
             <TableHead>Data</TableHead>
             {tasks.map((task, index) => (
               <TableHead key={`${task.title}-${index}`} className="text-center">
-                <button
-                  className="underline hover:no-underline"
-                  onClick={() => setSelectedTask({ task, index })}
+                <Button
+                  variant={"ghost"}
+                  className="underline hover:no-underline "
+                  onClick={() => handleTaskClick(task, index)}
                 >
                   {task.title}
-                </button>
+                </Button>
               </TableHead>
             ))}
           </TableRow>
@@ -104,33 +108,12 @@ export function TableSummary({
       </Table>
 
       {/* Modal com informações da task */}
-      <AlertDialog
-        open={!!selectedTask}
-        onOpenChange={() => setSelectedTask(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Informações da Tarefa</AlertDialogTitle>
-            <AlertDialogDescription>
-              <div className="space-y-2">
-                <p>
-                  <strong>Título:</strong> {selectedTask?.task.title}
-                </p>
-                <p>
-                  <strong>Descrição:</strong>{" "}
-                  {selectedTask?.task.description || "Sem descrição"}
-                </p>
-                <p>
-                  <strong>Índice:</strong> {selectedTask?.index}
-                </p>
-              </div>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Fechar</AlertDialogCancel>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <TaskInfoDialog
+        isOpen={!!selectedTask}
+        onOpenChange={handleCloseDialog}
+        task={selectedTask}
+        taskIndex={selectedTaskIndex}
+      />
     </div>
   );
 }

@@ -11,14 +11,7 @@ import {
 } from "@/shadcn/ui/dropdown-menu";
 import { Auth } from "@/shared/utils/Auth";
 import { useGetUser } from "@/shared/hooks/useGetUser";
-import {
-  Plus,
-  LogOut,
-  ChevronDown,
-  RefreshCw,
-  Info,
-  Settings,
-} from "lucide-react";
+import { LogOut, ChevronDown, RefreshCw, Info, Settings } from "lucide-react";
 import { taskActions } from "@/shared/hooks/store/useTaskStore";
 
 export default function TaskLayout() {
@@ -65,14 +58,6 @@ export default function TaskLayout() {
           <div className="flex items-center gap-4">
             {/* Navbar para telas grandes */}
             <div className="hidden md:flex items-center gap-4">
-              <Button
-                variant="ghost"
-                onClick={() => navigate("/tasks/new")}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Nova Tarefa
-              </Button>
               <Button
                 variant="ghost"
                 onClick={() => navigate("/tasks/manage")}
@@ -149,13 +134,7 @@ export default function TaskLayout() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => navigate("/tasks/new")}
-                    className="cursor-pointer"
-                  >
-                    <Plus className="mr-2 h-4 w-4" />
-                    Nova Tarefa
-                  </DropdownMenuItem>
+
                   <DropdownMenuItem
                     onClick={() => navigate("/tasks/manage")}
                     className="cursor-pointer"

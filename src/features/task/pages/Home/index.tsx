@@ -11,7 +11,7 @@ import { PendingTaskTable } from "./components/PendingTaskTable";
 export function HomePage() {
   const today = formatDate();
 
-  const tasks = useTaskStore();
+  const { tasks } = useTaskStore();
   const completionLog = useCompletedTaskLogStore() || {};
 
   const completedTaskIndices = completionLog[today] || [];
@@ -28,7 +28,10 @@ export function HomePage() {
             </p>
           </div>
 
-          <TableSummary tasks={tasks} completionLog={completionLog} />
+          <TableSummary
+            tasks={tasks.filter((task) => !task.isRemoved)}
+            completionLog={completionLog}
+          />
         </div>
       </Card>
 
