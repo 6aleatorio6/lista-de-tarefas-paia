@@ -9,8 +9,8 @@ export type ITask = {
   isRemoved?: boolean;
 };
 
-export const useTaskStore = create<ITask[]>()(
-  persist<ITask[]>(() => [], {
+export const useTaskStore = create<{ tasks: ITask[] }>()(
+  persist<{ tasks: ITask[] }>(() => ({ tasks: [] }), {
     name: "task-store-2",
     storage: asyncStorageZustand(),
     skipHydration: true,
@@ -34,42 +34,46 @@ export const taskActions = {
 
   addTask: (newTask: ITask) => {
     useTaskStore.setState((taskState) => {
-      if (taskState.find((task) => task.title === newTask.title)) {
+      if (taskState.tasks.find((task) => task.title === newTask.title)) {
         throw new Error(`Task with title "${newTask.title}" already exists.`);
       }
 
-      return [...taskState, newTask];
+      return { tasks: [...taskState.tasks, newTask] };
     });
   },
 
   removeTask: (taskTitle: string) => {
     useTaskStore.setState((taskState) => {
-      const taskIndex = taskState.findIndex((task) => task.title === taskTitle);
+      const taskIndex = taskState.tasks.findIndex(
+        (task) => task.title === taskTitle
+      );
 
       if (taskIndex === -1) {
         throw new Error(`Task with title "${taskTitle}" does not exist.`);
       }
 
-      const updatedTasks = [...taskState];
+      const updatedTasks = [...taskState.tasks];
 
       updatedTasks[taskIndex] = {
         ...updatedTasks[taskIndex],
         isRemoved: true,
       };
 
-      return updatedTasks;
+      return { tasks: updatedTasks };
     });
   },
 
   updateTask: (taskTitle: string, updates: Partial<ITask>) => {
     useTaskStore.setState((taskState) => {
-      const taskIndex = taskState.findIndex((task) => task.title === taskTitle);
+      const taskIndex = taskState.tasks.findIndex(
+        (task) => task.title === taskTitle
+      );
 
       if (taskIndex === -1) {
         throw new Error(`Task with title "${taskTitle}" does not exist.`);
       }
 
-      const updatedTasks = [...taskState];
+      const updatedTasks = [...taskState.tasks];
 
       updatedTasks[taskIndex] = {
         ...updatedTasks[taskIndex],
@@ -77,7 +81,7 @@ export const taskActions = {
         title: updates.title || updatedTasks[taskIndex]!.title,
       };
 
-      return updatedTasks;
+      return { tasks: updatedTasks };
     });
   },
 };

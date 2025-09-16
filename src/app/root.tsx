@@ -1,7 +1,8 @@
 import { Routes, Route, Navigate, HashRouter } from "react-router-dom";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
+import MigrateData from "@/shared/components/MigrateData";
 
 const LoginPage = lazy(() =>
   import("@/features/auth/pages/Login").then((m) => ({ default: m.LoginPage }))
@@ -22,20 +23,21 @@ const AboutPage = lazy(() =>
 export function App() {
   return (
     <HashRouter>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Routes>
-          <Route path="/auth" element={<AuthLayout />}>
-            <Route path="login" element={<LoginPage />} />
-          </Route>
+      <Routes>
+        <Route path="/auth" element={<AuthLayout />}>
+          <Route path="login" element={<LoginPage />} />
+        </Route>
+
+        <Route element={<MigrateData />}>
           <Route path="/tasks" element={<TaskLayout />}>
             <Route index element={<HomePage />} />
             <Route path="manage" element={<ManageTaskPage />} />
             <Route path="about" element={<AboutPage />} />
           </Route>
+        </Route>
 
-          <Route path="*" element={<Navigate to="/tasks" replace />} />
-        </Routes>
-      </Suspense>
+        <Route path="*" element={<Navigate to="/tasks" replace />} />
+      </Routes>
     </HashRouter>
   );
 }
