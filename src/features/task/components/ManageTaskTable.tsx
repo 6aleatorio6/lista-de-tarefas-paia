@@ -59,7 +59,10 @@ export function ManageTaskTable({
                   )}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {task.description || "-"}
+                  {task.description
+                    ? task.description.slice(0, 40) +
+                      (task.description.length > 40 ? "..." : "")
+                    : "-"}
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">
