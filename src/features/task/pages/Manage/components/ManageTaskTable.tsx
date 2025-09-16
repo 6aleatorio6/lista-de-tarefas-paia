@@ -12,14 +12,12 @@ import { Edit, Trash2 } from "lucide-react";
 
 interface ManageTaskTableProps {
   tasks: ITask[];
-  selectedTask: ITask | null;
   onTaskEdit: (task: ITask) => void;
   onTaskRemove: (taskTitle: string) => void;
 }
 
 export function ManageTaskTable({
   tasks,
-  selectedTask,
   onTaskEdit,
   onTaskRemove,
 }: ManageTaskTableProps) {
@@ -43,21 +41,9 @@ export function ManageTaskTable({
         </TableHeader>
         <TableBody>
           {tasks.map((task) => {
-            const isSelected = selectedTask?.title === task.title;
-
             return (
-              <TableRow
-                key={task.title}
-                className={isSelected ? "bg-primary/5 border-primary/20" : ""}
-              >
-                <TableCell className="font-medium">
-                  {task.title}
-                  {isSelected && (
-                    <span className="ml-2 text-xs text-primary bg-primary/10 px-2 py-1 rounded">
-                      Editando
-                    </span>
-                  )}
-                </TableCell>
+              <TableRow key={task.title}>
+                <TableCell className="font-medium">{task.title}</TableCell>
                 <TableCell className="text-muted-foreground">
                   {task.description
                     ? task.description.slice(0, 40) +
@@ -68,13 +54,13 @@ export function ManageTaskTable({
                   <div className="flex gap-2">
                     <Button
                       title="Editar tarefa"
-                      variant={isSelected ? "default" : "outline"}
+                      variant={"outline"}
                       size="sm"
                       onClick={() => onTaskEdit(task)}
                       className="flex items-center gap-2"
                     >
                       <Edit className="h-3 w-3" />
-                      {isSelected ? "Editando" : "Editar"}
+                      {"Editar"}
                     </Button>
                     <Button
                       title="Remover tarefa"

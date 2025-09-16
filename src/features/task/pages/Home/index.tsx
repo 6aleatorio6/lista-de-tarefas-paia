@@ -1,8 +1,9 @@
 import { Card } from "@/shadcn/ui/card";
 import { taskActions, useTaskStore } from "@/shared/hooks/store/useTaskStore";
-import { TableSummary } from "../components/TableSummary";
-import { PendingTaskTable } from "../components/PendingTaskTable";
+
 import { formatDate } from "@/shared/utils/todayFormatted";
+import { TableSummary } from "./components/TableSummary";
+import { PendingTaskTable } from "./components/PendingTaskTable";
 
 export function HomePage() {
   const today = formatDate();
