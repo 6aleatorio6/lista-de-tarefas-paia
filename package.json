@@ -1,12 +1,13 @@
 {
-  "name": "list",
+  "name": "lista-de-tarefas",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.3",
   "homepage": "https://6aleatorio6.github.io/lista-de-tarefas-paia",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "npm run update-build-date && tsc -b && vite build",
+    "update-build-date": "node scripts/updateBuildDate.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",

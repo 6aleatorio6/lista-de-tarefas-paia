@@ -11,8 +11,16 @@ import {
 } from "@/shadcn/ui/dropdown-menu";
 import { Auth } from "@/shared/utils/Auth";
 import { useGetUser } from "@/shared/hooks/useGetUser";
-import { LogOut, ChevronDown, RefreshCw, Info, Settings } from "lucide-react";
+import {
+  LogOut,
+  ChevronDown,
+  RefreshCw,
+  Info,
+  Settings,
+  Github,
+} from "lucide-react";
 import { taskActions } from "@/shared/hooks/store/useTaskStore";
+import { APP_NAME, APP_VERSION, BUILD_DATE } from "@/shared/utils/appInfo";
 
 export default function TaskLayout() {
   const navigate = useNavigate();
@@ -200,13 +208,33 @@ export default function TaskLayout() {
 
       {/* Footer */}
       <footer className="border-t bg-white py-4 text-center text-sm text-gray-500">
-        <Link
-          to={"https://www.linkedin.com/in/leonardo-l-felix/"}
-          target="_blank"
-          className="container mx-auto hover:underline hover:text-primary transition-colors"
-        >
-          Leonardo Lopes Felix &copy; {new Date().getFullYear()}
-        </Link>
+        <div className="container mx-auto space-y-2">
+          <div className="flex justify-center items-center gap-4">
+            <Link
+              to={"https://www.linkedin.com/in/leonardo-l-felix/"}
+              target="_blank"
+              className="hover:underline hover:text-primary transition-colors"
+            >
+              Leonardo Lopes Felix &copy; {new Date().getFullYear()}
+            </Link>
+            <span>•</span>
+            <Link
+              to={"https://github.com/6aleatorio6/lista-de-tarefas-paia"}
+              target="_blank"
+              className="flex items-center gap-1 hover:underline hover:text-primary transition-colors"
+            >
+              <Github className="h-3 w-3" />
+              GitHub
+            </Link>
+          </div>
+          <div className="flex justify-center items-center gap-4 text-xs text-gray-400">
+            <span>
+              {APP_NAME} v{APP_VERSION}
+            </span>
+            <span>•</span>
+            <span>Atualizado em {BUILD_DATE}</span>
+          </div>
+        </div>
       </footer>
     </div>
   );
