@@ -3,18 +3,23 @@ import { useState } from "react";
 import { useTaskStore, ITask } from "@/shared/hooks/store/useTaskStore";
 import { Button } from "@/shadcn/ui/button";
 import {
-  CreateTaskForm,
+  CreateTaskDialog,
   EditTaskDialog,
   DeleteTaskDialog,
   TaskListSection,
 } from "./components";
+import { Plus } from "lucide-react";
 
 export default function ManageTaskPage() {
   const navigate = useNavigate();
-  const tasks = useTaskStore();
+  const { tasks } = useTaskStore();
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
   const [taskToRemove, setTaskToRemove] = useState<string | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  // Filtra tarefas que não foram removidas
+  const activeTasks = tasks.filter((task) => !task.isRemoved);
 
   // Atualiza o formulário quando uma tarefa é selecionada para edição
   const handleTaskEdit = (task: ITask) => {
@@ -27,7 +32,7 @@ export default function ManageTaskPage() {
     // Se a tarefa removida estava sendo editada, fecha o modal
     if (
       selectedTask &&
-      !tasks.some((task) => task.title === selectedTask.title)
+      !activeTasks.some((task) => task.title === selectedTask.title)
     ) {
       setSelectedTask(null);
       setIsEditModalOpen(false);
@@ -45,12 +50,20 @@ export default function ManageTaskPage() {
         </p>
       </div>
 
-      {/* Seção de criação de tarefas */}
-      <CreateTaskForm />
+      {/* Botão para abrir modal de criação de tarefas */}
+      <div className="flex justify-start">
+        <Button
+          onClick={() => setIsCreateModalOpen(true)}
+          className="flex items-center gap-2"
+        >
+          <Plus className="h-4 w-4" />
+          Nova Tarefa
+        </Button>
+      </div>
 
       {/* Tabela de tarefas para gerenciamento */}
       <TaskListSection
-        tasks={tasks}
+        tasks={activeTasks}
         selectedTask={selectedTask}
         onTaskEdit={handleTaskEdit}
         onTaskRemove={(taskTitle: string) => setTaskToRemove(taskTitle)}
@@ -61,6 +74,13 @@ export default function ManageTaskPage() {
           Voltar
         </Button>
       </div>
+
+      {/* Modal de criação de tarefas */}
+      <CreateTaskDialog
+        isOpen={isCreateModalOpen}
+        onOpenChange={setIsCreateModalOpen}
+        onTaskCreated={handleTaskUpdated}
+      />
 
       {/* Modal de edição */}
       <EditTaskDialog

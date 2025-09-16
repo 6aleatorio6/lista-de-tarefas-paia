@@ -13,7 +13,12 @@ import {
 } from "@/shadcn/ui/form";
 import { Input } from "@/shadcn/ui/input";
 import { Textarea } from "@/shadcn/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/shadcn/ui/dialog";
 
 const taskSchema = z.object({
   title: z.string().min(3, "O título deve ter pelo menos 3 caracteres"),
@@ -22,11 +27,17 @@ const taskSchema = z.object({
 
 type TaskFormValues = z.infer<typeof taskSchema>;
 
-interface CreateTaskFormProps {
+interface CreateTaskDialogProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
   onTaskCreated?: () => void;
 }
 
-export function CreateTaskForm({ onTaskCreated }: CreateTaskFormProps) {
+export function CreateTaskDialog({
+  isOpen,
+  onOpenChange,
+  onTaskCreated,
+}: CreateTaskDialogProps) {
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
     defaultValues: { title: "", description: "" },
@@ -40,6 +51,7 @@ export function CreateTaskForm({ onTaskCreated }: CreateTaskFormProps) {
       });
 
       form.reset({ title: "", description: "" });
+      onOpenChange(false); // Fecha o modal
       onTaskCreated?.();
     } catch (error) {
       console.error("Erro ao criar tarefa:", error);
@@ -51,12 +63,18 @@ export function CreateTaskForm({ onTaskCreated }: CreateTaskFormProps) {
     }
   };
 
+  const handleCancel = () => {
+    onOpenChange(false);
+    form.reset({ title: "", description: "" });
+  };
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Nova Tarefa</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[800px]">
+        <DialogHeader>
+          <DialogTitle>Nova Tarefa</DialogTitle>
+        </DialogHeader>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -91,10 +109,15 @@ export function CreateTaskForm({ onTaskCreated }: CreateTaskFormProps) {
               )}
             />
 
-            <Button type="submit">Criar Tarefa</Button>
+            <div className="flex gap-4 pt-4">
+              <Button type="submit">Criar Tarefa</Button>
+              <Button type="button" variant="outline" onClick={handleCancel}>
+                Cancelar
+              </Button>
+            </div>
           </form>
         </Form>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
   );
 }

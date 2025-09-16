@@ -1,5 +1,5 @@
-export { CreateTaskForm } from "./CreateTaskForm";
-export { EditTaskDialog } from "./EditTaskDialog";
-export { DeleteTaskDialog } from "./DeleteTaskDialog";
-export { TaskListSection } from "./TaskListSection";
-export { ManageTaskTable } from "./ManageTaskTable";
+export * from "./CreateTaskDialog";
+export * from "./EditTaskDialog";
+export * from "./DeleteTaskDialog";
+export * from "./TaskListSection";
+export * from "./ManageTaskTable";

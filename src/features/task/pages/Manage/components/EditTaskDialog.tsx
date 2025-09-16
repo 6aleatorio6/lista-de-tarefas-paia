@@ -45,7 +45,7 @@ export function EditTaskDialog({
   selectedTask,
   onTaskUpdated,
 }: EditTaskDialogProps) {
-  const tasks = useTaskStore();
+  const { tasks } = useTaskStore();
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
@@ -75,7 +75,9 @@ export function EditTaskDialog({
       // Se o título mudou, precisamos remover a tarefa antiga e criar uma nova
       if (data.title !== selectedTask.title) {
         // Verifica se já existe uma tarefa com o novo título
-        if (tasks.some((task) => task.title === data.title)) {
+        if (
+          tasks.some((task) => task.title === data.title && !task.isRemoved)
+        ) {
           form.setError("title", {
             type: "manual",
             message: "Já existe uma tarefa com este título",
@@ -115,7 +117,7 @@ export function EditTaskDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>
             Editando:{" "}
