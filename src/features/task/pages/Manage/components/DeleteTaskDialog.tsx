@@ -36,20 +36,25 @@ export function DeleteTaskDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="w-full max-w-[95vw] sm:max-w-[500px] lg:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Remover tarefa</DialogTitle>
-          <DialogDescription>
-            Tem certeza que deseja remover a tarefa "{taskTitle}"? Esta ação não
-            pode ser desfeita.
+          <DialogDescription className="text-sm sm:text-base">
+            Tem certeza que deseja remover a tarefa{" "}
+            <span className="font-medium break-words">"{taskTitle}"</span>? Esta
+            ação não pode ser desfeita.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="flex gap-2">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+        <DialogFooter className="flex flex-col-reverse sm:flex-row gap-2">
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            className="w-full sm:w-auto"
+          >
             Cancelar
           </Button>
           <Button
-            className="bg-red-600 hover:bg-red-700"
+            className="bg-red-600 hover:bg-red-700 w-full sm:w-auto"
             onClick={handleConfirmRemove}
           >
             Remover

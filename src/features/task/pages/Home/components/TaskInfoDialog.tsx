@@ -22,9 +22,11 @@ export function TaskInfoDialog({
 }: TaskInfoDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="w-full max-w-[95vw] sm:max-w-[600px] lg:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle className="text-xl">Informações da Tarefa</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">
+            Informações da Tarefa
+          </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
@@ -32,7 +34,7 @@ export function TaskInfoDialog({
             <h4 className="text-sm font-semibold text-muted-foreground mb-1">
               TÍTULO
             </h4>
-            <p className="text-base">{task?.title}</p>
+            <p className="text-sm sm:text-base break-words">{task?.title}</p>
           </div>
 
           <div>
@@ -40,7 +42,7 @@ export function TaskInfoDialog({
               DESCRIÇÃO
             </h4>
             {task?.description ? (
-              <div className="bg-muted/50 rounded-md p-3 border">
+              <div className="bg-muted/50 rounded-md p-3 border max-h-[350px]  overflow-y-auto">
                 <p className="text-sm whitespace-pre-wrap leading-relaxed">
                   {task.description}
                 </p>
@@ -53,8 +55,12 @@ export function TaskInfoDialog({
           </div>
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+        <DialogFooter className="flex flex-col sm:flex-row gap-2">
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            className="w-full sm:w-auto"
+          >
             Fechar
           </Button>
         </DialogFooter>

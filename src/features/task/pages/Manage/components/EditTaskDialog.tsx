@@ -117,11 +117,13 @@ export function EditTaskDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="w-full max-w-[95vw] sm:max-w-[600px] lg:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="text-sm sm:text-base">
             Editando:{" "}
-            <span className="text-primary">{selectedTask?.title}</span>
+            <span className="text-primary break-words">
+              {selectedTask?.title}
+            </span>
           </DialogTitle>
         </DialogHeader>
 
@@ -150,7 +152,7 @@ export function EditTaskDialog({
                   <FormControl>
                     <Textarea
                       placeholder="Digite a descrição da tarefa"
-                      className="resize-none"
+                      className="resize-none min-h-[100px]"
                       {...field}
                     />
                   </FormControl>
@@ -159,9 +161,16 @@ export function EditTaskDialog({
               )}
             />
 
-            <div className="flex gap-4 pt-4">
-              <Button type="submit">Salvar Alterações</Button>
-              <Button type="button" variant="outline" onClick={handleCancel}>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 pt-4">
+              <Button type="submit" className="w-full sm:w-auto">
+                Salvar Alterações
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCancel}
+                className="w-full sm:w-auto"
+              >
                 Cancelar
               </Button>
             </div>

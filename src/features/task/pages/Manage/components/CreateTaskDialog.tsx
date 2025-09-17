@@ -70,7 +70,7 @@ export function CreateTaskDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="w-full max-w-[95vw] sm:max-w-[600px] lg:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>Nova Tarefa</DialogTitle>
         </DialogHeader>
@@ -100,7 +100,7 @@ export function CreateTaskDialog({
                   <FormControl>
                     <Textarea
                       placeholder="Digite a descrição da tarefa"
-                      className="resize-none"
+                      className="resize-none min-h-[100px]"
                       {...field}
                     />
                   </FormControl>
@@ -109,9 +109,16 @@ export function CreateTaskDialog({
               )}
             />
 
-            <div className="flex gap-4 pt-4">
-              <Button type="submit">Criar Tarefa</Button>
-              <Button type="button" variant="outline" onClick={handleCancel}>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 pt-4">
+              <Button type="submit" className="w-full sm:w-auto">
+                Criar Tarefa
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCancel}
+                className="w-full sm:w-auto"
+              >
                 Cancelar
               </Button>
             </div>
