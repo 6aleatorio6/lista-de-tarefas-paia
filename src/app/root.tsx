@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate, HashRouter } from "react-router-dom";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import MigrateData from "@/shared/components/MigrateData";
 import LoginPage from "@/features/auth/pages/Login";
 import AuthLayout from "@/features/auth/_layout";
 import TaskLayout from "@/features/task/_layout";
@@ -17,12 +16,10 @@ export function App() {
           <Route path="login" element={<LoginPage />} />
         </Route>
 
-        <Route element={<MigrateData />}>
-          <Route path="/tasks" element={<TaskLayout />}>
-            <Route index element={<HomePage />} />
-            <Route path="manage" element={<ManageTaskPage />} />
-            <Route path="about" element={<AboutPage />} />
-          </Route>
+        <Route path="/tasks" element={<TaskLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="manage" element={<ManageTaskPage />} />
+          <Route path="about" element={<AboutPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/tasks" replace />} />
