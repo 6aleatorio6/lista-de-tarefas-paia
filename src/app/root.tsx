@@ -1,16 +1,13 @@
 import { Routes, Route, Navigate, HashRouter } from "react-router-dom";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { lazy } from "react";
 import MigrateData from "@/shared/components/MigrateData";
-
-const LoginPage = lazy(() => import("@/features/auth/pages/Login"));
-const AuthLayout = lazy(() => import("@/features/auth/_layout"));
-const TaskLayout = lazy(() => import("@/features/task/_layout"));
-const HomePage = lazy(() => import("@/features/task/pages/Home"));
-const ManageTaskPage = lazy(() => import("@/features/task/pages/Manage"));
-
-const AboutPage = lazy(() => import("@/features/task/pages/About"));
+import LoginPage from "@/features/auth/pages/Login";
+import AuthLayout from "@/features/auth/_layout";
+import TaskLayout from "@/features/task/_layout";
+import HomePage from "@/features/task/pages/Home";
+import ManageTaskPage from "@/features/task/pages/Manage";
+import AboutPage from "@/features/task/pages/About";
 
 export function App() {
   return (
