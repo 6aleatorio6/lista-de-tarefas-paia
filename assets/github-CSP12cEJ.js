@@ -1,4 +1,4 @@
-import{r as t,A as a}from"./index-1Jet4_pD.js";import{c as u}from"./createLucideIcon-CxXRxaTr.js";const h=()=>{const[e,s]=t.useState(null),[o,c]=t.useState(!0);return t.useEffect(()=>{const n=a.onStateChanged(r=>{s(r),c(!1)});return()=>n()},[]),{user:e,loading:o}};/**
+import{r as t,A as a}from"./index-Dl3BhL78.js";import{c as u}from"./createLucideIcon-CS34WQhw.js";const h=()=>{const[e,s]=t.useState(null),[o,c]=t.useState(!0);return t.useEffect(()=>{const n=a.onStateChanged(r=>{s(r),c(!1)});return()=>n()},[]),{user:e,loading:o}};/**
  * @license lucide-react v0.541.0 - ISC
  *
  * This source code is licensed under the ISC license.
