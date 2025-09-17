@@ -10,7 +10,7 @@ import { Auth } from "@/shared/utils/Auth";
 import { useNavigate } from "react-router-dom";
 import birdIcon from "@/../assets/birdIcon.png";
 
-export function LoginPage() {
+export default function LoginPage() {
   const navigate = useNavigate();
 
   const handleGoogleLogin = async () => {

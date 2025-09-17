@@ -4,21 +4,13 @@ import { createRoot } from "react-dom/client";
 import { lazy } from "react";
 import MigrateData from "@/shared/components/MigrateData";
 
-const LoginPage = lazy(() =>
-  import("@/features/auth/pages/Login").then((m) => ({ default: m.LoginPage }))
-);
-const AuthLayout = lazy(() =>
-  import("@/features/auth/_layout").then((m) => ({ default: m.AuthLayout }))
-);
+const LoginPage = lazy(() => import("@/features/auth/pages/Login"));
+const AuthLayout = lazy(() => import("@/features/auth/_layout"));
 const TaskLayout = lazy(() => import("@/features/task/_layout"));
-const HomePage = lazy(() =>
-  import("@/features/task/pages/Home").then((m) => ({ default: m.HomePage }))
-);
+const HomePage = lazy(() => import("@/features/task/pages/Home"));
 const ManageTaskPage = lazy(() => import("@/features/task/pages/Manage"));
 
-const AboutPage = lazy(() =>
-  import("@/features/task/pages/About").then((m) => ({ default: m.AboutPage }))
-);
+const AboutPage = lazy(() => import("@/features/task/pages/About"));
 
 export function App() {
   return (

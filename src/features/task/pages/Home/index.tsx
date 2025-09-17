@@ -8,7 +8,7 @@ import { formatDate } from "@/shared/utils/todayFormatted";
 import { TableSummary } from "./components/TableSummary";
 import { PendingTaskTable } from "./components/PendingTaskTable";
 
-export function HomePage() {
+export default  function HomePage() {
   const today = formatDate();
 
   const { tasks } = useTaskStore();

@@ -2,7 +2,7 @@ import { useGetUser } from "@/shared/hooks/useGetUser";
 import { Navigate, Outlet } from "react-router-dom";
 import { Github } from "lucide-react";
 
-export function AuthLayout() {
+export default  function AuthLayout() {
   const { user, loading } = useGetUser();
 
   if (loading) {

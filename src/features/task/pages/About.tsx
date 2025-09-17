@@ -1,4 +1,4 @@
-export function AboutPage() {
+export default function AboutPage() {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold">Sobre o Projeto</h2>
