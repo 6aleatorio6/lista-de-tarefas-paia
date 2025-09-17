@@ -24,6 +24,7 @@ export function PendingTaskTable({
   const pendingTasks = useMemo(() => {
     return tasks
       .map((task, index) => ({ task, index }))
+      .filter(({ task }) => !task.isRemoved)
       .filter(({ index }) => !completedTaskIndices.includes(index));
   }, [tasks, completedTaskIndices]);
 
