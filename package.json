@@ -1,7 +1,7 @@
 {
   "name": "lista-de-tarefas",
   "private": true,
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://6aleatorio6.github.io/lista-de-tarefas-paia",
   "type": "module",
   "scripts": {
