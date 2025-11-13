@@ -4,7 +4,7 @@ import { IDateStringYMD } from "@/shared/utils/todayFormatted";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-// record<data, a posicao da task no array de tasks>
+// record<data, os IDs das tasks completadas>
 export type ICompletedTaskLogState = Record<IDateStringYMD, number[]>;
 
 export const useCompletedTaskLogStore = create<ICompletedTaskLogState>()(
@@ -30,26 +30,26 @@ export const completedTaskLogActions = {
     useCompletedTaskLogStore.persist.rehydrate();
   },
 
-  markTaskCompleted: (taskIndex: number, date: IDateStringYMD) => {
+  markTaskCompleted: (taskId: number, date: IDateStringYMD) => {
     useCompletedTaskLogStore.setState((state) => {
       const dayLogs = state[date] || [];
 
       // Verifica se a task já foi completada hoje
-      if (dayLogs.includes(taskIndex)) {
+      if (dayLogs.includes(taskId)) {
         return state; // Não adiciona duplicata
       }
 
       return {
         ...state,
-        [date]: [...dayLogs, taskIndex],
+        [date]: [...dayLogs, taskId],
       };
     });
   },
 
-  unmarkTaskCompleted: (taskIndex: number, date: IDateStringYMD) => {
+  unmarkTaskCompleted: (taskId: number, date: IDateStringYMD) => {
     useCompletedTaskLogStore.setState((state) => {
       const dayLogs = state[date] || [];
-      const filteredLogs = dayLogs.filter((index) => index !== taskIndex);
+      const filteredLogs = dayLogs.filter((id) => id !== taskId);
 
       if (filteredLogs.length === 0) {
         // Remove a entrada do dia se não houver mais logs

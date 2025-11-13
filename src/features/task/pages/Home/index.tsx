@@ -7,14 +7,19 @@ import {
 import { formatDate } from "@/shared/utils/todayFormatted";
 import { TableSummary } from "./components/TableSummary";
 import { PendingTaskTable } from "./components/PendingTaskTable";
+import { getActiveTasks, mapTasksWithId } from "@/shared/utils/taskUtils";
 
-export default  function HomePage() {
+export default function HomePage() {
   const today = formatDate();
 
   const { tasks } = useTaskStore();
   const completionLog = useCompletedTaskLogStore() || {};
 
-  const completedTaskIndices = completionLog[today] || [];
+  const completedTaskIds = completionLog[today] || [];
+
+  // Mapeia tarefas com ID
+  const tasksWithId = mapTasksWithId(tasks);
+  const activeTasks = getActiveTasks(tasks);
 
   return (
     <div className="p-6 space-y-8">
@@ -28,10 +33,7 @@ export default  function HomePage() {
             </p>
           </div>
 
-          <TableSummary
-            tasks={tasks.filter((task) => !task.isRemoved)}
-            completionLog={completionLog}
-          />
+          <TableSummary tasks={activeTasks} completionLog={completionLog} />
         </div>
       </Card>
 
@@ -52,23 +54,23 @@ export default  function HomePage() {
               <div className="flex items-center gap-1">
                 <div className="w-3 h-3 bg-yellow-400 rounded-full" />
                 <span className="text-sm text-muted-foreground">
-                  Pendentes hoje: {tasks.length - completedTaskIndices.length}
+                  Pendentes hoje: {activeTasks.length - completedTaskIds.length}
                 </span>
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-3 h-3 bg-green-400 rounded-full" />
                 <span className="text-sm text-muted-foreground">
-                  Concluídas hoje: {completedTaskIndices.length}
+                  Concluídas hoje: {completedTaskIds.length}
                 </span>
               </div>
             </div>
           </div>
 
           <PendingTaskTable
-            tasks={tasks}
-            completedTaskIndices={completedTaskIndices}
-            onComplete={(taskIndex) => {
-              completedTaskLogActions.markTaskCompleted(taskIndex, today);
+            tasks={tasksWithId}
+            completedTaskIds={completedTaskIds}
+            onComplete={(taskId) => {
+              completedTaskLogActions.markTaskCompleted(taskId, today);
             }}
           />
         </div>

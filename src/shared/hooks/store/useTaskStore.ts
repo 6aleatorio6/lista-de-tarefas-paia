@@ -7,10 +7,13 @@ export type ITask = {
   title: string;
   description?: string;
   isRemoved?: boolean;
+  id: number;
 };
 
-export const useTaskStore = create<{ tasks: ITask[] }>()(
-  persist<{ tasks: ITask[] }>(() => ({ tasks: [] }), {
+type ITaskStored = Omit<ITask, "id">;
+
+export const useTaskStore = create<{ tasks: ITaskStored[] }>()(
+  persist<{ tasks: ITaskStored[] }>(() => ({ tasks: [] }), {
     name: "task-store-2",
     storage: asyncStorageZustand(),
     skipHydration: true,
@@ -32,7 +35,7 @@ export const taskActions = {
     useTaskStore.persist.rehydrate();
   },
 
-  addTask: (newTask: ITask) => {
+  addTask: (newTask: Omit<ITask, "id">) => {
     useTaskStore.setState((taskState) => {
       if (taskState.tasks.find((task) => task.title === newTask.title)) {
         throw new Error(`Task with title "${newTask.title}" already exists.`);
@@ -63,7 +66,7 @@ export const taskActions = {
     });
   },
 
-  updateTask: (taskTitle: string, updates: Partial<ITask>) => {
+  updateTask: (taskTitle: string, updates: Partial<Omit<ITask, "id">>) => {
     useTaskStore.setState((taskState) => {
       const taskIndex = taskState.tasks.findIndex(
         (task) => task.title === taskTitle

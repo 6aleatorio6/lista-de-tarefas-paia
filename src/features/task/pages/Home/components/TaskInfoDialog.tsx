@@ -12,7 +12,6 @@ interface TaskInfoDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   task: ITask | null;
-  taskIndex: number | null;
 }
 
 export function TaskInfoDialog({

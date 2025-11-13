@@ -28,18 +28,13 @@ export function TableSummary({
   sizePage = 7,
 }: TableSummaryProps) {
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
-  const [selectedTaskIndex, setSelectedTaskIndex] = useState<number | null>(
-    null
-  );
 
-  const handleTaskClick = (task: ITask, index: number) => {
+  const handleTaskClick = (task: ITask) => {
     setSelectedTask(task);
-    setSelectedTaskIndex(index);
   };
 
   const handleCloseDialog = () => {
     setSelectedTask(null);
-    setSelectedTaskIndex(null);
   };
 
   const recentDates = Array.from({ length: sizePage }, (_, i) => {
@@ -63,12 +58,15 @@ export function TableSummary({
         <TableHeader>
           <TableRow>
             <TableHead>Data</TableHead>
-            {tasks.map((task, index) => (
-              <TableHead key={`${task.title}-${index}`} className="text-center">
+            {tasks.map((task) => (
+              <TableHead
+                key={`${task.title}-${task.id}`}
+                className="text-center"
+              >
                 <Button
                   variant={"ghost"}
                   className="underline hover:no-underline "
-                  onClick={() => handleTaskClick(task, index)}
+                  onClick={() => handleTaskClick(task)}
                 >
                   {task.title}
                 </Button>
@@ -78,7 +76,7 @@ export function TableSummary({
         </TableHeader>
         <TableBody>
           {recentDates.map(({ dateStr, dayOfWeek }) => {
-            const completedTaskIndicesForDay =
+            const completedTaskIdsForDay =
               completionLog[dateStr as IDateStringYMD] || [];
 
             return (
@@ -89,12 +87,11 @@ export function TableSummary({
                     {dayOfWeek} {formatDate() === dateStr ? "(hoje)" : ""}
                   </span>
                 </TableCell>
-                {tasks.map((task, taskIndex) => {
-                  const completed =
-                    completedTaskIndicesForDay.includes(taskIndex);
+                {tasks.map((task) => {
+                  const completed = completedTaskIdsForDay.includes(task.id);
                   return (
                     <TableCell
-                      key={`${dateStr}-${task.title}-${taskIndex}`}
+                      key={`${dateStr}-${task.title}-${task.id}`}
                       className="text-center"
                     >
                       {completed ? "✅" : "❌"}
@@ -112,7 +109,6 @@ export function TableSummary({
         isOpen={!!selectedTask}
         onOpenChange={handleCloseDialog}
         task={selectedTask}
-        taskIndex={selectedTaskIndex}
       />
     </div>
   );

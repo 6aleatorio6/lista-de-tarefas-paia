@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useTaskStore, ITask } from "@/shared/hooks/store/useTaskStore";
+import { getActiveTasks } from "@/shared/utils/taskUtils";
 import { Button } from "@/shadcn/ui/button";
 import {
   CreateTaskDialog,
@@ -18,8 +19,8 @@ export default function ManageTaskPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  // Filtra tarefas que não foram removidas
-  const activeTasks = tasks.filter((task) => !task.isRemoved);
+  // Filtra tarefas que não foram removidas e mapeia os índices como id
+  const activeTasks = getActiveTasks(tasks);
 
   // Atualiza o formulário quando uma tarefa é selecionada para edição
   const handleTaskEdit = (task: ITask) => {
